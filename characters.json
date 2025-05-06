@@ -22,4 +22,12 @@
     "hasPerception": false,
     "thoughtEndpoint": "https://jock-mind-api.vercel.app/api/director-context"
   }
+  {
+    "id": "sorority",
+    "name": "Sorority Girl",
+    "emoji": "💄",
+    "hasPerception": true,
+    "thoughtEndpoint": "https://jock-mind-api.vercel.app/api/sorority-thought",
+    "streamEndpoint": "https://jock-mind-api.vercel.app/api/sorority-stream"
+  }
 ]
