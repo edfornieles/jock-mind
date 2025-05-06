@@ -69,20 +69,19 @@
     console.log(`Fetched ${field} for ${id}:`, data); // Log the data fetched
 
     let content = data[field] || 'Unavailable';
-
-    // Apply color coding based on the perception category
-    if (id.includes("stream")) {
-      // Color-coding perception based on category
-      if (content.includes("environmental")) {
-        document.getElementById(id).style.color = 'blue'; // Blue for environmental
-      } else if (content.includes("social")) {
-        document.getElementById(id).style.color = 'red'; // Red for social thoughts
-      } else if (content.includes("internal")) {
-        document.getElementById(id).style.color = 'yellow'; // Yellow for internal
-      }
+    
+    // Apply color coding based on content:
+    const element = document.getElementById(id);
+    
+    if (content.includes("environmental")) {
+      element.style.color = 'blue'; // Environmental context
+    } else if (content.includes("social")) {
+      element.style.color = 'red'; // Social context
+    } else if (content.includes("internal")) {
+      element.style.color = 'yellow'; // Internal thoughts
     }
 
-    document.getElementById(id).innerText = content;
+    element.innerText = content; // Display the content
   } catch (e) {
     document.getElementById(id).innerText = 'Error loading data.';
     console.error("Error fetching:", e);
@@ -92,19 +91,9 @@
     // Function to build the dashboard dynamically
     async function buildDashboard() {
   const container = document.getElementById("dashboard");
-  
-  // Clear existing content before building the new dashboard
-  container.innerHTML = '';
-
   try {
     const res = await fetch("characters.json");
-
-    if (!res.ok) {
-      throw new Error("Failed to fetch characters.json");
-    }
-
     const characters = await res.json();
-    console.log("Fetched characters:", characters); // Log the entire characters data
 
     characters.forEach(char => {
       const card = document.createElement("div");
@@ -125,7 +114,6 @@
       thoughtContent.textContent = "Loading...";
       card.appendChild(thoughtContent);
 
-      console.log("Fetching thought data for:", char.name); // Log when fetching thought data
       fetchAndSet(`${char.id}-thought`, char.thoughtEndpoint, char.id === 'director' ? 'context' : 'thought');
 
       if (char.hasPerception) {
@@ -140,7 +128,6 @@
         streamContent.textContent = "Loading...";
         card.appendChild(streamContent);
 
-        console.log("Fetching perception data for:", char.name); // Log when fetching perception data
         fetchAndSet(`${char.id}-stream`, char.streamEndpoint, 'stream');
       }
 
@@ -151,6 +138,7 @@
     container.innerText = "Error loading character dashboard.";
   }
 }
+
 
     // Call buildDashboard and refresh every 60 seconds
     buildDashboard();
