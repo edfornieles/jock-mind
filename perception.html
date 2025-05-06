@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jock Perception Console</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 2rem;
+      background-color: #0b0b0b;
+      font-family: 'Courier New', monospace;
+      color: #39ff14;
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+
+    h1 {
+      color: #ffffff;
+      text-align: center;
+      font-size: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    #perception-log {
+      max-width: 900px;
+      margin: auto;
+      padding: 1.5rem;
+      background-color: #111;
+      border: 1px solid #222;
+      border-radius: 8px;
+      height: 70vh;
+      overflow-y: scroll;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <h1>🧠 Jock's Real-Time Perception Console</h1>
+  <div id="perception-log">Loading...</div>
+
+  <script>
+    const log = document.getElementById("perception-log");
+
+    async function fetchPerception() {
+      try {
+        const res = await fetch("https://jock-mind-api.vercel.app/api/jock-stream");
+        const data = await res.json();
+        const time = new Date().toLocaleTimeString();
+        const entry = `\n[${time}] ${data.stream}\n`;
+        log.innerText += entry;
+        log.scrollTop = log.scrollHeight;
+      } catch (err) {
+        console.error("Error fetching perception:", err);
+      }
+    }
+
+    fetchPerception();
+    setInterval(fetchPerception, 15000); // update every 15 seconds
+  </script>
+</body>
+</html>
