@@ -58,22 +58,36 @@
   <script>
     // Function to fetch and update character thought and perception data
     async function fetchAndSet(id, url, field = 'thought') {
-      try {
-        const res = await fetch(url);
-        
-        if (!res.ok) {
-          throw new Error(`Failed to fetch data from ${url}`);
-        }
+  try {
+    const res = await fetch(url);
 
-        const data = await res.json();
-        console.log("Fetched data for:", id, data);  // Log the fetched data
+    if (!res.ok) {
+      throw new Error(`Failed to fetch data from ${url}`);
+    }
 
-        document.getElementById(id).innerText = data[field] || 'Unavailable';
-      } catch (e) {
-        document.getElementById(id).innerText = 'Error loading data.';
-        console.error("Error fetching:", e);
+    const data = await res.json();
+    console.log(`Fetched ${field} for ${id}:`, data); // Log the data fetched
+
+    let content = data[field] || 'Unavailable';
+
+    // Apply color coding based on the perception category
+    if (id.includes("stream")) {
+      // Color-coding perception based on category
+      if (content.includes("environmental")) {
+        document.getElementById(id).style.color = 'blue'; // Blue for environmental
+      } else if (content.includes("social")) {
+        document.getElementById(id).style.color = 'red'; // Red for social thoughts
+      } else if (content.includes("internal")) {
+        document.getElementById(id).style.color = 'yellow'; // Yellow for internal
       }
     }
+
+    document.getElementById(id).innerText = content;
+  } catch (e) {
+    document.getElementById(id).innerText = 'Error loading data.';
+    console.error("Error fetching:", e);
+  }
+}
 
     // Function to build the dashboard dynamically
     async function buildDashboard() {
