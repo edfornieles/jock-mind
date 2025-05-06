@@ -44,38 +44,54 @@
     Loading internal monologue...
   </div>
 
-  <div class="credit">Mind of the Jock – Powered by AI</div>
+  <div class="credit">Mind of the Jock – Berkeley, CA</div>
 
   <script>
-    // Example internal monologues and background scenes (what he is seeing)
-    const scenes = [
-      {
-        thought: "Why does the air in the gym smell like home? I could live here.",
-        image: "gym.jpg"
-      },
-      {
-        thought: "Coach says it's just another drill, but it feels like war out there.",
-        image: "football_field.jpg"
-      },
-      {
-        thought: "She looked at me again. Or maybe she looked through me. Same difference.",
-        image: "hallway.jpg"
-      },
-      {
-        thought: "This sweat isn’t from fear. It’s from pushing past what I was yesterday.",
-        image: "locker_room.jpg"
-      },
-      {
-        thought: "They don’t know I rehearse my victory speech in the mirror every morning.",
-        image: "mirror.jpg"
-      }
+    const weatherStates = ["Sunny", "Cloudy", "Rainy", "Windy", "Cold"];
+    const dailyEvents = [
+      "Game day against Stanford",
+      "Midterms week",
+      "Party last night",
+      "Recovery day at the gym",
+      "Hungover and hungry",
+      "Just saw my crush",
+      "Coach benched me",
+      "Woke up sore from deadlifts"
     ];
 
-    const seed = new Date().toDateString();
-    const index = [...seed].reduce((acc, char) => acc + char.charCodeAt(0), 0) % scenes.length;
+    const thoughtMatrix = [
+      "My legs are bricks but I still walked past her like I was floating.",
+      "If I bomb this midterm, at least I still have my quads.",
+      "Coach says rest, but my mind only knows hustle.",
+      "That party got weird. Might be done with beer. For now.",
+      "I swear the bench press whispered her name today.",
+      "Berkeley wind hits different after leg day.",
+      "Today is loud. Everyone's moving. I'm still.",
+      "Cold field. Warm chest. Helmet on. Let's go."
+    ];
 
-    document.body.style.backgroundImage = `url('${scenes[index].image}')`;
-    document.getElementById("thought-content").innerText = scenes[index].thought;
+    const backgroundImages = {
+      Sunny: "gym.jpg",
+      Cloudy: "hallway.jpg",
+      Rainy: "mirror.jpg",
+      Windy: "football_field.jpg",
+      Cold: "locker_room.jpg"
+    };
+
+    // Get consistent daily seed
+    const seed = new Date().toDateString();
+    const hash = [...seed].reduce((acc, char) => acc + char.charCodeAt(0), 0);
+
+    // Use hash to pick values from arrays
+    const weather = weatherStates[hash % weatherStates.length];
+    const event = dailyEvents[hash % dailyEvents.length];
+    const thought = thoughtMatrix[hash % thoughtMatrix.length];
+
+    // Set image based on weather
+    document.body.style.backgroundImage = `url('${backgroundImages[weather]}')`;
+
+    // Combine event and thought
+    document.getElementById("thought-content").innerText = `${thought}\n\n(${event})`;
   </script>
 </body>
 </html>
