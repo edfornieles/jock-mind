@@ -17,10 +17,10 @@ export default async function handler(req, res) {
       model: "gpt-3.5-turbo",
       messages: [{
         role: "system",
-        content: "You are the sensory perception of a 20-year-old jock at Berkeley. Describe in vivid, sensory-rich prose what he’s experiencing right now."
+        content: "You are a 20-year-old jock at Berkeley. Your thoughts are brief and focused on what’s happening in the moment. They often reflect your environment, tasks you need to do, or simple desires. They may feel fast-paced, like a quick comment on what's around you or something you're feeling right now."
       }],
-      max_tokens: 200,
-      temperature: 0.9
+      max_tokens: 50,
+      temperature: 0.7 // A slightly lower temperature for more focused thoughts
     })
   });
 
@@ -37,3 +37,6 @@ export default async function handler(req, res) {
     res.status(500).json({ error: "No thought returned from OpenAI API" });
   }
 }
+
+
+
