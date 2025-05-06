@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Character Dashboard</title>
+  <style>
+    body {
+      margin: 0;
+      background-color: #0a0a0a;
+      font-family: Arial, sans-serif;
+      color: #e0e0e0;
+    }
+    header {
+      background: #111;
+      padding: 1rem 2rem;
+      font-size: 1.5rem;
+      border-bottom: 1px solid #333;
+    }
+    .dashboard {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1rem;
+      padding: 1rem;
+    }
+    .character-card {
+      background: #1a1a1a;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      box-shadow: 0 0 10px rgba(0, 255, 128, 0.15);
+    }
+    .character-card h2 {
+      margin-top: 0;
+      font-size: 1.2rem;
+      color: #00ff99;
+    }
+    .section-label {
+      font-weight: bold;
+      margin-top: 1rem;
+      margin-bottom: 0.25rem;
+      font-size: 0.9rem;
+      color: #888;
+    }
+    .content {
+      background: #111;
+      padding: 0.5rem;
+      border-radius: 4px;
+      font-size: 0.95rem;
+      min-height: 80px;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <header>🎭 AI Character Dashboard – Unified by Director</header>
+  <div class="dashboard">
+    <!-- Character 1: Jock -->
+    <div class="character-card">
+      <h2>🏈 Jock</h2>
+      <div class="section-label">Thought</div>
+      <div class="content" id="jock-thought">Loading...</div>
+      <div class="section-label">Perception</div>
+      <div class="content" id="jock-stream">Loading...</div>
+    </div>
+
+    <!-- Shared Director -->
+    <div class="character-card">
+      <h2>🎬 Director</h2>
+      <div class="section-label">Context</div>
+      <div class="content" id="director-context">Loading...</div>
+    </div>
+
+    <!-- More characters will go here -->
+  </div>
+
+  <script>
+    async function fetchAndSet(id, url) {
+      try {
+        const res = await fetch(url);
+        const data = await res.json();
+        document.getElementById(id).innerText =
+          data.thought || data.stream || data.context || 'Unavailable';
+      } catch (e) {
+        document.getElementById(id).innerText = 'Error loading data.';
+        console.error(e);
+      }
+    }
+
+    fetchAndSet("jock-thought", "https://jock-mind-api.vercel.app/api/jock-thought");
+    fetchAndSet("jock-stream", "https://jock-mind-api.vercel.app/api/jock-stream");
+    fetchAndSet("director-context", "https://jock-mind-api.vercel.app/api/director-context");
+
+    setInterval(() => {
+      fetchAndSet("jock-thought", "https://jock-mind-api.vercel.app/api/jock-thought");
+      fetchAndSet("jock-stream", "https://jock-mind-api.vercel.app/api/jock-stream");
+      fetchAndSet("director-context", "https://jock-mind-api.vercel.app/api/director-context");
+    }, 60000); // refresh every 60 seconds
+  </script>
+</body>
+</html>
