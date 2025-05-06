@@ -10,7 +10,8 @@
       padding: 0;
       background-size: cover;
       background-position: center;
-      font-family: 'Georgia', serif;
+      font-family: 'Arial', sans-serif;
+      font-weight: bold;
       color: white;
       height: 100vh;
       display: flex;
@@ -59,17 +60,6 @@
       "Woke up sore from deadlifts"
     ];
 
-    const thoughtMatrix = [
-      "My legs are bricks but I still walked past her like I was floating.",
-      "If I bomb this midterm, at least I still have my quads.",
-      "Coach says rest, but my mind only knows hustle.",
-      "That party got weird. Might be done with beer. For now.",
-      "I swear the bench press whispered her name today.",
-      "Berkeley wind hits different after leg day.",
-      "Today is loud. Everyone's moving. I'm still.",
-      "Cold field. Warm chest. Helmet on. Let's go."
-    ];
-
     const backgroundImages = {
       Sunny: "gym.jpg",
       Cloudy: "hallway.jpg",
@@ -78,20 +68,24 @@
       Cold: "locker_room.jpg"
     };
 
-    // Get consistent daily seed
     const seed = new Date().toDateString();
     const hash = [...seed].reduce((acc, char) => acc + char.charCodeAt(0), 0);
-
-    // Use hash to pick values from arrays
     const weather = weatherStates[hash % weatherStates.length];
     const event = dailyEvents[hash % dailyEvents.length];
-    const thought = thoughtMatrix[hash % thoughtMatrix.length];
 
-    // Set image based on weather
     document.body.style.backgroundImage = `url('${backgroundImages[weather]}')`;
 
-    // Combine event and thought
-    document.getElementById("thought-content").innerText = `${thought}\n\n(${event})`;
+    // Fetch dynamic thought from serverless AI endpoint
+    fetch('https://jock-mind-api.vercel.app/api/jock-thought')
+      .then(response => response.json())
+      .then(data => {
+        const thought = data.thought || "I can’t hear myself over the echo of my own hype.";
+        document.getElementById("thought-content").innerText = `${thought}\n\n(${event})`;
+      })
+      .catch(err => {
+        document.getElementById("thought-content").innerText = `Mind blank. Try again later.\n\n(${event})`;
+        console.error(err);
+      });
   </script>
 </body>
 </html>
