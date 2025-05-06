@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inside the Jock's Mind</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-size: cover;
+      background-position: center;
+      font-family: 'Georgia', serif;
+      color: white;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-shadow: 2px 2px 5px black;
+      transition: background-image 1s ease-in-out;
+    }
+
+    .thought-container {
+      max-width: 80%;
+      background-color: rgba(0, 0, 0, 0.6);
+      padding: 2rem;
+      border-radius: 1rem;
+      font-size: 1.8rem;
+      line-height: 1.6;
+      text-align: center;
+    }
+
+    .credit {
+      position: absolute;
+      bottom: 10px;
+      right: 20px;
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+  </style>
+</head>
+<body>
+  <div class="thought-container" id="thought-content">
+    Loading internal monologue...
+  </div>
+
+  <div class="credit">Mind of the Jock – Powered by AI</div>
+
+  <script>
+    // Example internal monologues and background scenes (what he is seeing)
+    const scenes = [
+      {
+        thought: "Why does the air in the gym smell like home? I could live here.",
+        image: "gym.jpg"
+      },
+      {
+        thought: "Coach says it's just another drill, but it feels like war out there.",
+        image: "football_field.jpg"
+      },
+      {
+        thought: "She looked at me again. Or maybe she looked through me. Same difference.",
+        image: "hallway.jpg"
+      },
+      {
+        thought: "This sweat isn’t from fear. It’s from pushing past what I was yesterday.",
+        image: "locker_room.jpg"
+      },
+      {
+        thought: "They don’t know I rehearse my victory speech in the mirror every morning.",
+        image: "mirror.jpg"
+      }
+    ];
+
+    const seed = new Date().toDateString();
+    const index = [...seed].reduce((acc, char) => acc + char.charCodeAt(0), 0) % scenes.length;
+
+    document.body.style.backgroundImage = `url('${scenes[index].image}')`;
+    document.getElementById("thought-content").innerText = scenes[index].thought;
+  </script>
+</body>
+</html>
