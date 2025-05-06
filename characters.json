@@ -1,33 +1,26 @@
 [
-  {
-    "id": "jock",
-    "name": "Jock",
-    "emoji": "🏈",
-    "hasPerception": true,
-    "thoughtEndpoint": "https://jock-mind-api.vercel.app/api/jock-thought",
-    "streamEndpoint": "https://jock-mind-api.vercel.app/api/jock-stream"
-  },
-  {
-    "id": "artist",
-    "name": "Artist",
-    "emoji": "🎨",
-    "hasPerception": true,
-    "thoughtEndpoint": "https://jock-mind-api.vercel.app/api/artist-thought",
-    "streamEndpoint": "https://jock-mind-api.vercel.app/api/artist-stream"
-  },
-  {
-    "id": "director",
-    "name": "Director",
-    "emoji": "🎬",
-    "hasPerception": false,
-    "thoughtEndpoint": "https://jock-mind-api.vercel.app/api/director-context"
-  }
-  {
-    "id": "sorority",
-    "name": "Sorority Girl",
-    "emoji": "💄",
-    "hasPerception": true,
-    "thoughtEndpoint": "https://jock-mind-api.vercel.app/api/sorority-thought",
-    "streamEndpoint": "https://jock-mind-api.vercel.app/api/sorority-stream"
-  }
-]
+    {
+      "id": "jock",
+      "name": "Jock",
+      "emoji": "🏈",
+      "hasPerception": true,
+      "thoughtEndpoint": "https://jock-mind-api.vercel.app/api/jock-thought",
+      "streamEndpoint": "https://jock-mind-api.vercel.app/api/jock-stream"
+    },
+    {
+      "id": "sorority",
+      "name": "Sorority Girl",
+      "emoji": "💄",
+      "hasPerception": true,
+      "thoughtEndpoint": "https://jock-mind-api.vercel.app/api/sorority-thought",
+      "streamEndpoint": "https://jock-mind-api.vercel.app/api/sorority-stream"
+    },
+    {
+      "id": "director",
+      "name": "Director",
+      "emoji": "🎬",
+      "hasPerception": false,
+      "thoughtEndpoint": "https://jock-mind-api.vercel.app/api/director-context"
+    }
+  ]
+  
