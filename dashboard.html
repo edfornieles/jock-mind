@@ -56,9 +56,29 @@
   <div class="dashboard" id="dashboard"></div>
 
   <script>
+    // Function to fetch and update character thought and perception data
+    async function fetchAndSet(id, url, field = 'thought') {
+      try {
+        const res = await fetch(url);
+        
+        if (!res.ok) {
+          throw new Error(`Failed to fetch data from ${url}`);
+        }
+
+        const data = await res.json();
+        console.log("Fetched data for:", id, data);  // Log the fetched data
+
+        document.getElementById(id).innerText = data[field] || 'Unavailable';
+      } catch (e) {
+        document.getElementById(id).innerText = 'Error loading data.';
+        console.error("Error fetching:", e);
+      }
+    }
+
+    // Function to build the dashboard dynamically
     async function buildDashboard() {
       const container = document.getElementById("dashboard");
-    
+
       try {
         const res = await fetch("characters.json");
 
@@ -68,6 +88,7 @@
         }
 
         const characters = await res.json();
+        console.log("Fetched characters:", characters); // Log the entire characters data
 
         characters.forEach(char => {
           const card = document.createElement("div");
@@ -88,6 +109,7 @@
           thoughtContent.textContent = "Loading...";
           card.appendChild(thoughtContent);
 
+          console.log("Fetching thought data for:", char.name); // Log when fetching thought data
           fetchAndSet(`${char.id}-thought`, char.thoughtEndpoint, char.id === 'director' ? 'context' : 'thought');
 
           if (char.hasPerception) {
@@ -102,6 +124,7 @@
             streamContent.textContent = "Loading...";
             card.appendChild(streamContent);
 
+            console.log("Fetching perception data for:", char.name); // Log when fetching perception data
             fetchAndSet(`${char.id}-stream`, char.streamEndpoint, 'stream');
           }
 
