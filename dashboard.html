@@ -1,61 +1,121 @@
-</script>
-async function buildDashboard() {
-    const container = document.getElementById("dashboard");
-  
-    try {
-      const res = await fetch("characters.json");
-  
-      // Check if the fetch is successful
-      if (!res.ok) {
-        throw new Error("Failed to fetch characters.json");
-      }
-  
-      const characters = await res.json();
-  
-      characters.forEach(char => {
-        const card = document.createElement("div");
-        card.className = "character-card";
-  
-        const title = document.createElement("h2");
-        title.textContent = `${char.emoji} ${char.name}`;
-        card.appendChild(title);
-  
-        const thoughtLabel = document.createElement("div");
-        thoughtLabel.className = "section-label";
-        thoughtLabel.textContent = char.id === 'director' ? 'Context' : 'Thought';
-        card.appendChild(thoughtLabel);
-  
-        const thoughtContent = document.createElement("div");
-        thoughtContent.className = "content";
-        thoughtContent.id = `${char.id}-thought`;
-        thoughtContent.textContent = "Loading...";
-        card.appendChild(thoughtContent);
-  
-        fetchAndSet(`${char.id}-thought`, char.thoughtEndpoint, char.id === 'director' ? 'context' : 'thought');
-  
-        if (char.hasPerception) {
-          const streamLabel = document.createElement("div");
-          streamLabel.className = "section-label";
-          streamLabel.textContent = "Perception";
-          card.appendChild(streamLabel);
-  
-          const streamContent = document.createElement("div");
-          streamContent.className = "content";
-          streamContent.id = `${char.id}-stream`;
-          streamContent.textContent = "Loading...";
-          card.appendChild(streamContent);
-  
-          fetchAndSet(`${char.id}-stream`, char.streamEndpoint, 'stream');
-        }
-  
-        container.appendChild(card);
-      });
-    } catch (err) {
-      console.error("Failed to load character directory:", err);
-      container.innerText = "Error loading character dashboard.";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Character Dashboard</title>
+  <style>
+    body {
+      margin: 0;
+      background-color: #0a0a0a;
+      font-family: Arial, sans-serif;
+      color: #e0e0e0;
     }
-  }
-  
-  setInterval(buildDashboard, 60000); // Refresh every 60 sec
-</script>
-  
+    header {
+      background: #111;
+      padding: 1rem 2rem;
+      font-size: 1.5rem;
+      border-bottom: 1px solid #333;
+    }
+    .dashboard {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1rem;
+      padding: 1rem;
+    }
+    .character-card {
+      background: #1a1a1a;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      box-shadow: 0 0 10px rgba(0, 255, 128, 0.15);
+    }
+    .character-card h2 {
+      margin-top: 0;
+      font-size: 1.2rem;
+      color: #00ff99;
+    }
+    .section-label {
+      font-weight: bold;
+      margin-top: 1rem;
+      margin-bottom: 0.25rem;
+      font-size: 0.9rem;
+      color: #888;
+    }
+    .content {
+      background: #111;
+      padding: 0.5rem;
+      border-radius: 4px;
+      font-size: 0.95rem;
+      min-height: 80px;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <header>🎭 AI Character Dashboard – Unified by Director</header>
+  <div class="dashboard" id="dashboard"></div>
+
+  <script>
+    async function buildDashboard() {
+      const container = document.getElementById("dashboard");
+    
+      try {
+        const res = await fetch("characters.json");
+
+        // Check if the fetch is successful
+        if (!res.ok) {
+          throw new Error("Failed to fetch characters.json");
+        }
+
+        const characters = await res.json();
+
+        characters.forEach(char => {
+          const card = document.createElement("div");
+          card.className = "character-card";
+
+          const title = document.createElement("h2");
+          title.textContent = `${char.emoji} ${char.name}`;
+          card.appendChild(title);
+
+          const thoughtLabel = document.createElement("div");
+          thoughtLabel.className = "section-label";
+          thoughtLabel.textContent = char.id === 'director' ? 'Context' : 'Thought';
+          card.appendChild(thoughtLabel);
+
+          const thoughtContent = document.createElement("div");
+          thoughtContent.className = "content";
+          thoughtContent.id = `${char.id}-thought`;
+          thoughtContent.textContent = "Loading...";
+          card.appendChild(thoughtContent);
+
+          fetchAndSet(`${char.id}-thought`, char.thoughtEndpoint, char.id === 'director' ? 'context' : 'thought');
+
+          if (char.hasPerception) {
+            const streamLabel = document.createElement("div");
+            streamLabel.className = "section-label";
+            streamLabel.textContent = "Perception";
+            card.appendChild(streamLabel);
+
+            const streamContent = document.createElement("div");
+            streamContent.className = "content";
+            streamContent.id = `${char.id}-stream`;
+            streamContent.textContent = "Loading...";
+            card.appendChild(streamContent);
+
+            fetchAndSet(`${char.id}-stream`, char.streamEndpoint, 'stream');
+          }
+
+          container.appendChild(card);
+        });
+      } catch (err) {
+        console.error("Failed to load character directory:", err);
+        container.innerText = "Error loading character dashboard.";
+      }
+    }
+
+    // Call buildDashboard and refresh every 60 seconds
+    buildDashboard();
+    setInterval(buildDashboard, 60000); // refresh all every 60 sec
+  </script>
+</body>
+</html>
