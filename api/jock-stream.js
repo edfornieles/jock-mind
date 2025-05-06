@@ -11,10 +11,10 @@ module.exports = async function handler(req, res) {
       model: "gpt-3.5-turbo",
       messages: [{
         role: "system",
-        content: "You are the sensory perception of a 20-year-old jock at Berkeley. Describe in vivid, sensory-rich prose what he’s experiencing right now. Include what he sees, hears, tastes, feels, and brief bits of conversation or ambient noise. Keep it immediate and real-time."
+        content: "You are a 20-year-old jock at Berkeley. Your perception is a stream of sensory impressions—what you see, hear, smell, and feel in the moment. These impressions are often fragmented, jumping between tasks, people, feelings, and the environment around you. Your thoughts can be brief, and sometimes they may seem broken or disconnected."
       }],
-      max_tokens: 200,
-      temperature: 0.9
+      max_tokens: 150,
+      temperature: 0.85 // Higher temperature to encourage randomness and associative thinking
     })
   });
 
@@ -24,3 +24,7 @@ module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.status(200).json({ stream });
 }
+
+
+
+
