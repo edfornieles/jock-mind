@@ -15,20 +15,27 @@
       color: white;
       height: 100vh;
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
       text-shadow: 2px 2px 5px black;
       transition: background-image 1s ease-in-out;
     }
 
-    .thought-container {
+    .thought-container, .context-container {
       max-width: 80%;
       background-color: rgba(0, 0, 0, 0.6);
-      padding: 2rem;
+      padding: 1.5rem;
       border-radius: 1rem;
-      font-size: 1.8rem;
-      line-height: 1.6;
+      font-size: 1.6rem;
+      line-height: 1.5;
       text-align: center;
+      margin: 1rem;
+    }
+
+    .context-container {
+      font-style: italic;
+      font-weight: normal;
     }
 
     .credit {
@@ -41,6 +48,10 @@
   </style>
 </head>
 <body>
+  <div class="context-container" id="context-content">
+    Loading context...
+  </div>
+
   <div class="thought-container" id="thought-content">
     Loading internal monologue...
   </div>
@@ -75,7 +86,7 @@
 
     document.body.style.backgroundImage = `url('${backgroundImages[weather]}')`;
 
-    // Fetch dynamic thought from serverless AI endpoint
+    // Fetch dynamic jock thought
     fetch('https://jock-mind-api.vercel.app/api/jock-thought')
       .then(response => response.json())
       .then(data => {
@@ -84,6 +95,18 @@
       })
       .catch(err => {
         document.getElementById("thought-content").innerText = `Mind blank. Try again later.\n\n(${event})`;
+        console.error(err);
+      });
+
+    // Fetch director/context narration
+    fetch('https://jock-mind-api.vercel.app/api/director-context')
+      .then(response => response.json())
+      .then(data => {
+        const context = data.context || "The sky hangs low over Berkeley today, as if the clouds are watching too.";
+        document.getElementById("context-content").innerText = context;
+      })
+      .catch(err => {
+        document.getElementById("context-content").innerText = "The world is quiet, waiting for something to begin.";
         console.error(err);
       });
   </script>
