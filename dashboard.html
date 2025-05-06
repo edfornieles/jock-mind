@@ -1,7 +1,15 @@
+</script>
 async function buildDashboard() {
     const container = document.getElementById("dashboard");
+  
     try {
       const res = await fetch("characters.json");
+  
+      // Check if the fetch is successful
+      if (!res.ok) {
+        throw new Error("Failed to fetch characters.json");
+      }
+  
       const characters = await res.json();
   
       characters.forEach(char => {
@@ -47,4 +55,7 @@ async function buildDashboard() {
       container.innerText = "Error loading character dashboard.";
     }
   }
+  
+  setInterval(buildDashboard, 60000); // Refresh every 60 sec
+</script>
   
