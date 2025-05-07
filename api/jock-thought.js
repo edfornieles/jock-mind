@@ -1,9 +1,8 @@
-// thought-api.js (Backend)
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
 export default async function handler(req, res) {
-  // Set CORS headers to allow requests from your GitHub Pages domain
-  res.setHeader('Access-Control-Allow-Origin', '*'); // Allow all origins for testing
+  // Set CORS headers to allow requests from all origins
+  res.setHeader('Access-Control-Allow-Origin', '*');  // Allow all origins for testing
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
@@ -18,7 +17,7 @@ export default async function handler(req, res) {
         model: "gpt-3.5-turbo",
         messages: [{
           role: "system",
-          content: "You are a 20-year-old jock at Berkeley. Your thoughts are fleeting and one line at a time. You make decisions based on what you perceive in your environment."
+          content: "You are a 20-year-old jock at Berkeley. Your thoughts are fleeting and one line at a time."
         }],
         max_tokens: 50,
         temperature: 0.7

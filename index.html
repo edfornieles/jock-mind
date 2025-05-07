@@ -6,47 +6,50 @@
   <title>AI Character Dashboard</title>
   <style>
     body {
+      margin: 0;
       font-family: Arial, sans-serif;
-      background-image: url('path_to_background_image.jpg');
-      background-size: cover;
       color: white;
+      background-image: url('https://your-image-url.com/background.jpg'); /* Update with correct background image URL */
+      background-size: cover;
+      background-position: center;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .thought {
+      font-size: 3rem;
       font-weight: bold;
-      font-size: 36px;
       text-align: center;
-      padding: 100px;
+      white-space: pre-wrap;
+      max-width: 80%;
     }
   </style>
 </head>
 <body>
-  <div id="thought"></div>
+  <div class="thought" id="thought">Loading...</div>
 
   <script>
     async function fetchThought() {
       try {
-        const thoughtRes = await fetch('https://jock-mind-api.vercel.app/api/thought');
-        const thoughtData = await thoughtRes.json();
-        document.getElementById('thought').innerText = thoughtData.thought;
+        const response = await fetch('https://jock-mind-api.vercel.app/api/jock-thought');
+        if (!response.ok) {
+          throw new Error('Failed to fetch thought');
+        }
+        const data = await response.json();
+        const thought = data.thought || "No thought available.";
+        
+        document.getElementById('thought').textContent = thought;
+        
+        // Make it fade in and out slowly
+        setTimeout(fetchThought, 4000);  // Delay for the next thought
       } catch (error) {
-        console.error("Error fetching thought:", error);
+        document.getElementById('thought').textContent = "Error fetching thought.";
+        console.error('Error fetching thought:', error);
       }
     }
 
-    async function fetchPerception() {
-      try {
-        const perceptionRes = await fetch('https://jock-mind-api.vercel.app/api/perception');
-        const perceptionData = await perceptionRes.json();
-        console.log("Current Perception:", perceptionData.perception);
-
-        // Update the thought based on the perception (logic to be refined)
-        fetchThought();
-      } catch (error) {
-        console.error("Error fetching perception:", error);
-      }
-    }
-
-    // Start fetching perception and thought every 10 seconds (simulate the flow)
-    setInterval(fetchPerception, 10000);
-    fetchPerception();  // Initial fetch
+    fetchThought();  // Start the fetching process
   </script>
 </body>
 </html>

@@ -1,29 +1,45 @@
-// perception-api.js (Backend)
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
 export default async function handler(req, res) {
-  // Set CORS headers to allow requests from your GitHub Pages domain
-  res.setHeader('Access-Control-Allow-Origin', '*'); // Allow all origins for testing
+  res.setHeader('Access-Control-Allow-Origin', '*');  // Allow all origins for testing
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-  if (req.method === "POST") {
-    const { perception } = req.body;
+  try {
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${OPENAI_API_KEY}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        model: "gpt-3.5-turbo",
+        messages: [{
+          role: "system",
+          content: "You are a 20-year-old jock at Berkeley. You perceive the world around you, and your perception is a stream of sensory impressions that influence your decisions."
+        }],
+        max_tokens: 150,
+        temperature: 0.85
+      })
+    });
 
-    // Logic to update perception after a decision is made (e.g., character going to the food truck)
-    try {
-      const updatedPerception = `New perception after decision: ${perception}`; // This can be dynamically built based on the decision
-      res.status(200).json({ updatedPerception });
-    } catch (err) {
-      res.status(500).json({ error: "Failed to update perception" });
+    const data = await response.json();
+    const perception = data.choices?.[0]?.message?.content?.trim();
+    
+    // Categorize the perception
+    let category = "yellow"; // Default to yellow (internal)
+    if (perception.includes("environmental")) {
+      category = "blue"; // Environmental context
+    } else if (perception.includes("social")) {
+      category = "red"; // Social context
     }
-  } else {
-    // Initial Perception Request (to start with initial environment data)
-    try {
-      const initialPerception = "You are walking through campus, feeling the warm sun on your face, and thinking about food.";
-      res.status(200).json({ perception: initialPerception });
-    } catch (err) {
-      res.status(500).json({ error: "Failed to fetch initial perception" });
+
+    if (perception) {
+      res.status(200).json({ perception, category });
+    } else {
+      res.status(500).json({ error: "No perception data returned" });
     }
+  } catch (error) {
+    res.status(500).json({ error: "Error with OpenAI API" });
   }
 }
