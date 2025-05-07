@@ -6,54 +6,47 @@
   <title>AI Character Dashboard</title>
   <style>
     body {
-      margin: 0;
       font-family: Arial, sans-serif;
-      color: #ffffff;
-      background: url('gym.jpg') no-repeat center center fixed;
+      background-image: url('path_to_background_image.jpg');
       background-size: cover;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    .thought {
-      font-size: 3rem;
+      color: white;
       font-weight: bold;
+      font-size: 36px;
       text-align: center;
-      letter-spacing: 2px;
-      color: #ffffff;
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-      opacity: 0;
-      transition: opacity 1s ease-in-out; /* Longer fade */
+      padding: 100px;
     }
   </style>
 </head>
 <body>
-  <div id="thought" class="thought"></div>
+  <div id="thought"></div>
 
   <script>
-    let thoughts = [
-      "Just finished practice, now time to hit the books.",
-      "I need to grab some food, maybe a burrito from the truck.",
-      "That girl just walked by. Wonder if she noticed me.",
-      "Focus. Class starts in 10 minutes. No distractions.",
-      "I'm exhausted but the workout felt good. Gotta keep pushing."
-    ];
-
-    let thoughtIndex = 0;
-    const thoughtElement = document.getElementById("thought");
-
-    function showThought() {
-      thoughtElement.style.opacity = 0;  // Fade out
-      setTimeout(() => {
-        thoughtElement.innerText = thoughts[thoughtIndex];
-        thoughtElement.style.opacity = 1;  // Fade in
-      }, 1000);  // Wait for fade out
-      thoughtIndex = (thoughtIndex + 1) % thoughts.length;
+    async function fetchThought() {
+      try {
+        const thoughtRes = await fetch('https://jock-mind-api.vercel.app/api/thought');
+        const thoughtData = await thoughtRes.json();
+        document.getElementById('thought').innerText = thoughtData.thought;
+      } catch (error) {
+        console.error("Error fetching thought:", error);
+      }
     }
 
-    setInterval(showThought, 6000);  // Show a new thought every 6 seconds
-    showThought();  // Initial thought
+    async function fetchPerception() {
+      try {
+        const perceptionRes = await fetch('https://jock-mind-api.vercel.app/api/perception');
+        const perceptionData = await perceptionRes.json();
+        console.log("Current Perception:", perceptionData.perception);
+
+        // Update the thought based on the perception (logic to be refined)
+        fetchThought();
+      } catch (error) {
+        console.error("Error fetching perception:", error);
+      }
+    }
+
+    // Start fetching perception and thought every 10 seconds (simulate the flow)
+    setInterval(fetchPerception, 10000);
+    fetchPerception();  // Initial fetch
   </script>
 </body>
 </html>
