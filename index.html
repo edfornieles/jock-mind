@@ -3,52 +3,57 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Jock's Mind</title>
+  <title>AI Character Dashboard</title>
   <style>
     body {
-      font-family: 'Arial', sans-serif;
       margin: 0;
+      font-family: Arial, sans-serif;
+      color: #ffffff;
+      background: url('gym.jpg') no-repeat center center fixed;
+      background-size: cover;
+      height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
-      color: white;
-      text-align: center;
-      background-image: url('https://example.com/berkeley-campus.jpg'); /* Set appropriate image URL here */
-      background-size: cover;
-      background-position: center;
-      background-attachment: fixed;
     }
-
-    .thought-container {
-      font-size: 4rem; /* Large text */
+    .thought {
+      font-size: 3rem;
       font-weight: bold;
-      padding: 20px;
-      text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5); /* Subtle text shadow for readability */
+      text-align: center;
+      letter-spacing: 2px;
+      color: #ffffff;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out;
     }
   </style>
 </head>
 <body>
-  <div class="thought-container" id="thought-container">
-    Loading thought...
-  </div>
+  <div id="thought" class="thought"></div>
 
   <script>
-    async function fetchThought() {
-      try {
-        const res = await fetch("https://jock-mind-api.vercel.app/api/jock-thought");
-        const data = await res.json();
-        const thought = data.thought || "No thought available.";
-        document.getElementById("thought-container").innerText = thought;
-      } catch (e) {
-        console.error("Error fetching thought:", e);
-        document.getElementById("thought-container").innerText = "Error loading thought.";
-      }
+    let thoughts = [
+      "Just finished practice, now time to hit the books.",
+      "I need to grab some food, maybe a burrito from the truck.",
+      "That girl just walked by. Wonder if she noticed me.",
+      "Focus. Class starts in 10 minutes. No distractions.",
+      "I'm exhausted but the workout felt good. Gotta keep pushing."
+    ];
+
+    let thoughtIndex = 0;
+    const thoughtElement = document.getElementById("thought");
+
+    function showThought() {
+      thoughtElement.style.opacity = 0;  // Fade out
+      setTimeout(() => {
+        thoughtElement.innerText = thoughts[thoughtIndex];
+        thoughtElement.style.opacity = 1;  // Fade in
+      }, 500);
+      thoughtIndex = (thoughtIndex + 1) % thoughts.length;
     }
 
-    // Refresh thought every 5 seconds to simulate fleeting thoughts
-    setInterval(fetchThought, 5000);
-    fetchThought(); // Initial load
+    setInterval(showThought, 3000);  // Show a new thought every 3 seconds
+    showThought();  // Initial thought
   </script>
 </body>
 </html>
