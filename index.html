@@ -3,112 +3,52 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Inside the Jock's Mind</title>
+  <title>Jock's Mind</title>
   <style>
     body {
-      margin: 0;
-      padding: 0;
-      background-size: cover;
-      background-position: center;
       font-family: 'Arial', sans-serif;
-      font-weight: bold;
-      color: white;
-      height: 100vh;
+      margin: 0;
       display: flex;
-      flex-direction: column;
       justify-content: center;
       align-items: center;
-      text-shadow: 2px 2px 5px black;
-      transition: background-image 1s ease-in-out;
-    }
-
-    .thought-container, .context-container {
-      max-width: 80%;
-      background-color: rgba(0, 0, 0, 0.6);
-      padding: 1.5rem;
-      border-radius: 1rem;
-      font-size: 1.6rem;
-      line-height: 1.5;
+      height: 100vh;
+      color: white;
       text-align: center;
-      margin: 1rem;
+      background-image: url('https://example.com/berkeley-campus.jpg'); /* Set appropriate image URL here */
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
     }
 
-    .context-container {
-      font-style: italic;
-      font-weight: normal;
-    }
-
-    .credit {
-      position: absolute;
-      bottom: 10px;
-      right: 20px;
-      font-size: 0.8rem;
-      opacity: 0.6;
+    .thought-container {
+      font-size: 4rem; /* Large text */
+      font-weight: bold;
+      padding: 20px;
+      text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5); /* Subtle text shadow for readability */
     }
   </style>
 </head>
 <body>
-  <div class="context-container" id="context-content">
-    Loading context...
+  <div class="thought-container" id="thought-container">
+    Loading thought...
   </div>
-
-  <div class="thought-container" id="thought-content">
-    Loading internal monologue...
-  </div>
-
-  <div class="credit">Mind of the Jock – Berkeley, CA</div>
 
   <script>
-    const weatherStates = ["Sunny", "Cloudy", "Rainy", "Windy", "Cold"];
-    const dailyEvents = [
-      "Game day against Stanford",
-      "Midterms week",
-      "Party last night",
-      "Recovery day at the gym",
-      "Hungover and hungry",
-      "Just saw my crush",
-      "Coach benched me",
-      "Woke up sore from deadlifts"
-    ];
+    async function fetchThought() {
+      try {
+        const res = await fetch("https://jock-mind-api.vercel.app/api/jock-thought");
+        const data = await res.json();
+        const thought = data.thought || "No thought available.";
+        document.getElementById("thought-container").innerText = thought;
+      } catch (e) {
+        console.error("Error fetching thought:", e);
+        document.getElementById("thought-container").innerText = "Error loading thought.";
+      }
+    }
 
-    const backgroundImages = {
-      Sunny: "gym.jpg",
-      Cloudy: "hallway.jpg",
-      Rainy: "mirror.jpg",
-      Windy: "football_field.jpg",
-      Cold: "locker_room.jpg"
-    };
-
-    const seed = new Date().toDateString();
-    const hash = [...seed].reduce((acc, char) => acc + char.charCodeAt(0), 0);
-    const weather = weatherStates[hash % weatherStates.length];
-    const event = dailyEvents[hash % dailyEvents.length];
-
-    document.body.style.backgroundImage = `url('${backgroundImages[weather]}')`;
-
-    // Fetch dynamic jock thought
-    fetch('https://jock-mind-api.vercel.app/api/jock-thought')
-      .then(response => response.json())
-      .then(data => {
-        const thought = data.thought || "I can’t hear myself over the echo of my own hype.";
-        document.getElementById("thought-content").innerText = `${thought}\n\n(${event})`;
-      })
-      .catch(err => {
-        document.getElementById("thought-content").innerText = `Mind blank. Try again later.\n\n(${event})`;
-        console.error(err);
-      });
-
-    // Fetch director/context narration
-    fetch('https://jock-mind-api.vercel.app/api/director-context')
-      .then(response => response.json())
-      .then(data => {
-        const context = data.context || "The sky hangs low over Berkeley today, as if the clouds are watching too.";
-        document.getElementById("context-content").innerText = context;
-      })
-      .catch(err => {
-        document.getElementById("context-content").innerText = "The world is quiet, waiting for something to begin.";
-        console.error(err);
-      });
+    // Refresh thought every 5 seconds to simulate fleeting thoughts
+    setInterval(fetchThought, 5000);
+    fetchThought(); // Initial load
   </script>
 </body>
 </html>
