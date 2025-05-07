@@ -1,19 +1,60 @@
-async function fetchThought() {
-  const res = await fetch('https://jock-mind-api.vercel.app/api/jock-thought');
-  const data = await res.json();
-  const thoughtElement = document.getElementById('thought');
-  thoughtElement.innerText = data.thought || "No thought available.";
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Character Dashboard</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      font-weight: bold;
+      background-color: #ffffff; /* White background */
+      color: #000000; /* Black text */
+      margin: 0;
+      padding: 0;
+    }
+    #thought, #perception {
+      font-size: 2rem;
+      margin: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div id="thought">Loading thought...</div>
+  <div id="perception">Loading perception...</div>
 
-async function fetchPerception() {
-  const res = await fetch('https://jock-mind-api.vercel.app/api/jock-stream');
-  const data = await res.json();
-  const perceptionElement = document.getElementById('perception');
-  perceptionElement.innerText = data.perception || "No perception data available.";
-}
+  <script>
+    async function fetchThought() {
+      try {
+        const res = await fetch('https://jock-mind-api.vercel.app/api/jock-thought');
+        const data = await res.json();
+        const thoughtElement = document.getElementById('thought');
+        thoughtElement.innerText = data.thought || "No thought available.";
+      } catch (e) {
+        console.error("Error fetching thought:", e);
+        document.getElementById('thought').innerText = "Error loading thought.";
+      }
+    }
 
-setInterval(fetchThought, 2000); // Fetch thought every 2 seconds
-setInterval(fetchPerception, 3000); // Fetch perception every 3 seconds
+    async function fetchPerception() {
+      try {
+        const res = await fetch('https://jock-mind-api.vercel.app/api/jock-stream');
+        const data = await res.json();
+        const perceptionElement = document.getElementById('perception');
+        perceptionElement.innerText = data.perception || "No perception data available.";
+      } catch (e) {
+        console.error("Error fetching perception:", e);
+        document.getElementById('perception').innerText = "Error loading perception.";
+      }
+    }
 
-fetchThought();
-fetchPerception();
+    // Fetch data initially and set intervals
+    window.onload = function() {
+      fetchThought();
+      fetchPerception();
+      setInterval(fetchThought, 2000); // Fetch thought every 2 seconds
+      setInterval(fetchPerception, 3000); // Fetch perception every 3 seconds
+    }
+  </script>
+</body>
+</html>
