@@ -58,39 +58,41 @@
   <script>
     // Function to fetch and update character thought and perception data
     async function fetchAndSet(id, url, field = 'thought') {
-  try {
-    const res = await fetch(url);
+      try {
+        const res = await fetch(url);
 
-    if (!res.ok) {
-      throw new Error(`Failed to fetch data from ${url}`);
+        if (!res.ok) {
+          throw new Error(`Failed to fetch data from ${url}`);
+        }
+
+        const data = await res.json();
+        console.log(`Fetched ${field} for ${id}:`, data); // Log the data fetched
+
+        let content = data[field] || 'Unavailable';
+        
+        // Apply color coding based on content:
+        const element = document.getElementById(id);
+        
+        if (content.includes("environmental")) {
+          element.style.color = 'blue'; // Environmental context
+        } else if (content.includes("social")) {
+          element.style.color = 'red'; // Social context
+        } else if (content.includes("internal")) {
+          element.style.color = 'yellow'; // Internal thoughts
+        }
+
+        element.innerText = content; // Display the content
+      } catch (e) {
+        document.getElementById(id).innerText = 'Error loading data.';
+        console.error("Error fetching:", e);
+      }
     }
-
-    const data = await res.json();
-    console.log(`Fetched ${field} for ${id}:`, data); // Log the data fetched
-
-    let content = data[field] || 'Unavailable';
-    
-    // Apply color coding based on content:
-    const element = document.getElementById(id);
-    
-    if (content.includes("environmental")) {
-      element.style.color = 'blue'; // Environmental context
-    } else if (content.includes("social")) {
-      element.style.color = 'red'; // Social context
-    } else if (content.includes("internal")) {
-      element.style.color = 'yellow'; // Internal thoughts
-    }
-
-    element.innerText = content; // Display the content
-  } catch (e) {
-    document.getElementById(id).innerText = 'Error loading data.';
-    console.error("Error fetching:", e);
-  }
-}
 
     // Function to build the dashboard dynamically
-    async function buildDashboard() {
+    // Function to build the dashboard dynamically
+async function buildDashboard() {
   const container = document.getElementById("dashboard");
+  container.innerHTML = ''; // Clear previous content to prevent duplication
   try {
     const res = await fetch("characters.json");
     const characters = await res.json();
@@ -139,9 +141,8 @@
   }
 }
 
-
-    // Call buildDashboard and refresh every 60 seconds
-    buildDashboard();
+// Call buildDashboard only once, without setInterval
+buildDashboard();
     setInterval(buildDashboard, 60000); // refresh all every 60 sec
   </script>
 </body>

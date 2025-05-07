@@ -1,6 +1,12 @@
-export default async function handler(req, res) {
   const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
+  export default async function handler(req, res) {
+    // Set CORS headers
+    res.setHeader('Access-Control-Allow-Origin', 'https://edfornieles.github.io'); // Allow GitHub Pages
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  
+  }
   const prompt = `
 You are the invisible narrator of a college drama set at Berkeley. 
 Describe in 1–2 poetic sentences what’s happening in the world of a 20-year-old college athlete today. 
