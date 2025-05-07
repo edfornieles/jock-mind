@@ -52,15 +52,13 @@
   </style>
 </head>
 <body>
-  <header>🎭 AI Character Dashboard – Unified by Director</header>
+  <header>🎭 AI Character Dashboard</header>
   <div class="dashboard" id="dashboard"></div>
 
   <script>
-    // Function to fetch and update character thought and perception data
     async function fetchAndSet(id, url, field = 'thought') {
       try {
         const res = await fetch(url);
-
         if (!res.ok) {
           throw new Error(`Failed to fetch data from ${url}`);
         }
@@ -88,61 +86,57 @@
       }
     }
 
-    // Function to build the dashboard dynamically
-    // Function to build the dashboard dynamically
-async function buildDashboard() {
-  const container = document.getElementById("dashboard");
-  container.innerHTML = ''; // Clear previous content to prevent duplication
-  try {
-    const res = await fetch("characters.json");
-    const characters = await res.json();
+    async function buildDashboard() {
+      const container = document.getElementById("dashboard");
+      try {
+        const res = await fetch("characters.json");
+        const characters = await res.json();
 
-    characters.forEach(char => {
-      const card = document.createElement("div");
-      card.className = "character-card";
+        characters.forEach(char => {
+          const card = document.createElement("div");
+          card.className = "character-card";
 
-      const title = document.createElement("h2");
-      title.textContent = `${char.emoji} ${char.name}`;
-      card.appendChild(title);
+          const title = document.createElement("h2");
+          title.textContent = `${char.emoji} ${char.name}`;
+          card.appendChild(title);
 
-      const thoughtLabel = document.createElement("div");
-      thoughtLabel.className = "section-label";
-      thoughtLabel.textContent = char.id === 'director' ? 'Context' : 'Thought';
-      card.appendChild(thoughtLabel);
+          const thoughtLabel = document.createElement("div");
+          thoughtLabel.className = "section-label";
+          thoughtLabel.textContent = 'Thought';
+          card.appendChild(thoughtLabel);
 
-      const thoughtContent = document.createElement("div");
-      thoughtContent.className = "content";
-      thoughtContent.id = `${char.id}-thought`;
-      thoughtContent.textContent = "Loading...";
-      card.appendChild(thoughtContent);
+          const thoughtContent = document.createElement("div");
+          thoughtContent.className = "content";
+          thoughtContent.id = `${char.id}-thought`;
+          thoughtContent.textContent = "Loading...";
+          card.appendChild(thoughtContent);
 
-      fetchAndSet(`${char.id}-thought`, char.thoughtEndpoint, char.id === 'director' ? 'context' : 'thought');
+          fetchAndSet(`${char.id}-thought`, char.thoughtEndpoint, 'thought');
 
-      if (char.hasPerception) {
-        const streamLabel = document.createElement("div");
-        streamLabel.className = "section-label";
-        streamLabel.textContent = "Perception";
-        card.appendChild(streamLabel);
+          if (char.hasPerception) {
+            const streamLabel = document.createElement("div");
+            streamLabel.className = "section-label";
+            streamLabel.textContent = "Perception";
+            card.appendChild(streamLabel);
 
-        const streamContent = document.createElement("div");
-        streamContent.className = "content";
-        streamContent.id = `${char.id}-stream`;
-        streamContent.textContent = "Loading...";
-        card.appendChild(streamContent);
+            const streamContent = document.createElement("div");
+            streamContent.className = "content";
+            streamContent.id = `${char.id}-stream`;
+            streamContent.textContent = "Loading...";
+            card.appendChild(streamContent);
 
-        fetchAndSet(`${char.id}-stream`, char.streamEndpoint, 'stream');
+            fetchAndSet(`${char.id}-stream`, char.streamEndpoint, 'stream');
+          }
+
+          container.appendChild(card);
+        });
+      } catch (err) {
+        console.error("Failed to load character directory:", err);
+        container.innerText = "Error loading character dashboard.";
       }
+    }
 
-      container.appendChild(card);
-    });
-  } catch (err) {
-    console.error("Failed to load character directory:", err);
-    container.innerText = "Error loading character dashboard.";
-  }
-}
-
-// Call buildDashboard only once, without setInterval
-buildDashboard();
+    buildDashboard();
     setInterval(buildDashboard, 60000); // refresh all every 60 sec
   </script>
 </body>

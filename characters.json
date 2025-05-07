@@ -15,12 +15,5 @@
       "thoughtEndpoint": "https://jock-mind-api.vercel.app/api/sorority-thought",
       "streamEndpoint": "https://jock-mind-api.vercel.app/api/sorority-stream"
     },
-    {
-      "id": "director",
-      "name": "Director",
-      "emoji": "🎬",
-      "hasPerception": false,
-      "thoughtEndpoint": "https://jock-mind-api.vercel.app/api/director-context"
-    }
   ]
   

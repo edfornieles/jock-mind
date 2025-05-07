@@ -1,36 +1,44 @@
-  const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
-  export default async function handler(req, res) {
-    // Set CORS headers
-    res.setHeader('Access-Control-Allow-Origin', 'https://edfornieles.github.io'); // Allow GitHub Pages
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  
+export default async function handler(req, res) {
+  try {
+    // Make sure OPENAI_API_KEY is present
+    if (!OPENAI_API_KEY) {
+      throw new Error('OPENAI_API_KEY is missing!');
+    }
+
+    // OpenAI API request
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${OPENAI_API_KEY}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        model: "gpt-3.5-turbo",
+        messages: [{
+          role: "system",
+          content: "You are the director at Berkeley. You are managing the environment, tracking where people are, their activities, and maintaining the context of their thoughts and perceptions."
+        }],
+        max_tokens: 150,
+        temperature: 0.85
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error(`OpenAI API error: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    const context = data.choices?.[0]?.message?.content?.trim();
+
+    if (context) {
+      res.status(200).json({ context });
+    } else {
+      throw new Error("Failed to retrieve context from OpenAI");
+    }
+  } catch (error) {
+    console.error("Error in director-context:", error);
+    res.status(500).json({ error: error.message });
   }
-  const prompt = `
-You are the invisible narrator of a college drama set at Berkeley. 
-Describe in 1–2 poetic sentences what’s happening in the world of a 20-year-old college athlete today. 
-Mention light, weather, sound, social energy, or the rhythm of campus life.
-Keep it moody, vivid, and present-tense.
-`;
-
-  const response = await fetch('https://api.openai.com/v1/completions', {
-    method: 'POST',
-    headers: {
-      'Authorization': \`Bearer \${OPENAI_API_KEY}\`,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      model: 'text-davinci-003',
-      prompt,
-      max_tokens: 80,
-      temperature: 0.85
-    })
-  });
-
-  const data = await response.json();
-  const context = data.choices?.[0]?.text?.trim();
-
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.status(200).json({ context });
 }
