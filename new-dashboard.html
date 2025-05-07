@@ -3,72 +3,77 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI Character Dashboard</title>
+  <title>New Dashboard</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background-color: #1a1a1a;
-      color: #e0e0e0;
+      font-family: 'Courier New', monospace;
+      background-color: black;
+      color: lime;
       margin: 0;
       padding: 0;
     }
 
     header {
-      background-color: #111;
-      padding: 20px;
       text-align: center;
-      font-size: 2rem;
-      color: #00ff99;
-      border-bottom: 2px solid #444;
+      padding: 20px;
+      font-size: 2.5rem;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: lime;
+      border-bottom: 3px solid lime;
     }
 
     .dashboard {
       display: flex;
       justify-content: space-evenly;
-      margin-top: 30px;
       flex-wrap: wrap;
-      gap: 20px;
       padding: 20px;
+      gap: 30px;
     }
 
     .character-card {
-      background-color: #222;
-      border-radius: 8px;
+      background-color: #333;
+      border: 2px solid #444;
+      border-radius: 10px;
+      width: 300px;
       padding: 20px;
-      width: 280px;
-      box-shadow: 0 4px 6px rgba(0, 255, 128, 0.3);
+      box-shadow: 0 0 10px rgba(0, 255, 0, 0.4);
     }
 
     .character-card h2 {
-      font-size: 1.5rem;
-      margin-bottom: 10px;
-      color: #00ff99;
+      font-size: 1.8rem;
+      margin-bottom: 15px;
+      text-align: center;
+      color: #00ff00;
+      text-transform: uppercase;
     }
 
     .section-label {
-      font-size: 1rem;
       font-weight: bold;
-      color: #888;
+      margin-top: 10px;
+      font-size: 1.2rem;
     }
 
     .content {
-      font-size: 1rem;
-      color: #fff;
-      background-color: #333;
+      background-color: #222;
+      color: #00ff00;
       padding: 10px;
-      border-radius: 6px;
+      font-size: 1rem;
       min-height: 60px;
+      white-space: pre-wrap;
       margin-top: 10px;
+      border-radius: 6px;
+      border: 1px solid #444;
     }
 
     .content.loading {
-      color: #ccc;
+      color: gray;
     }
   </style>
 </head>
 <body>
 
-  <header>🎭 AI Character Dashboard</header>
+  <header>NEW DASHBOARD - 80s Retro</header>
 
   <div class="dashboard" id="dashboard"></div>
 
