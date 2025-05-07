@@ -2,12 +2,12 @@ const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
 export default async function handler(req, res) {
   // Set CORS headers to allow requests from your GitHub Pages domain
-  res.setHeader('Access-Control-Allow-Origin', 'https://edfornieles.github.io'); // This allows the request from GitHub Pages
+  res.setHeader('Access-Control-Allow-Origin', 'https://edfornieles.github.io');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
   // OpenAI API call for Jock's Thought
-  const thoughtResponse = await fetch("https://api.openai.com/v1/chat/completions", {
+  const response = await fetch("https://api.openai.com/v1/chat/completions", {
     method: "POST",
     headers: {
       "Authorization": `Bearer ${OPENAI_API_KEY}`,
@@ -17,51 +17,19 @@ export default async function handler(req, res) {
       model: "gpt-3.5-turbo",
       messages: [{
         role: "system",
-        content: "You are a 20-year-old jock at Berkeley. Your thoughts are brief and focused on what’s happening in the moment. They reflect your immediate environment, tasks you need to do, or simple desires. They may be fast-paced, like a quick comment on what's around you."
+        content: "You are a 20-year-old jock at Berkeley. Your thoughts are brief, fleeting, and reflect what’s happening in the moment. They are no longer than one sentence or fragment of thought."
       }],
-      max_tokens: 50,
+      max_tokens: 50, // Short, brief thoughts
       temperature: 0.7
     })
   });
 
-  const thoughtData = await thoughtResponse.json();
-  const thought = thoughtData.choices?.[0]?.message?.content?.trim();
+  const data = await response.json();
+  const thought = data.choices?.[0]?.message?.content?.trim();
 
-  // OpenAI API call for Jock's Perception
-  const perceptionResponse = await fetch("https://api.openai.com/v1/chat/completions", {
-    method: "POST",
-    headers: {
-      "Authorization": `Bearer ${OPENAI_API_KEY}`,
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      model: "gpt-3.5-turbo",
-      messages: [{
-        role: "system",
-        content: "You are a 20-year-old jock at Berkeley. Your perception is a stream of sensory impressions—what you see, hear, smell, and feel in the moment. These impressions may blur together and include thoughts about people around you, fleeting desires, environmental sounds, and physical sensations. The impressions are fast-paced and sometimes fragmented."
-      }],
-      max_tokens: 150,
-      temperature: 0.85
-    })
-  });
-
-  const perceptionData = await perceptionResponse.json();
-  const perception = perceptionData.choices?.[0]?.message?.content?.trim();
-
-  // Categorize the perception (blue = environmental, red = social, yellow = internal)
-  let category = "yellow"; // Default to yellow if not categorized
-  if (perception.includes("environmental") || perception.includes("sun") || perception.includes("wind") || perception.includes("gym")) {
-    category = "blue"; // Environmental context
-  } else if (perception.includes("social") || perception.includes("people") || perception.includes("guy") || perception.includes("girl")) {
-    category = "red"; // Social context
-  } else if (perception.includes("dream") || perception.includes("fear") || perception.includes("anxiety") || perception.includes("internal")) {
-    category = "yellow"; // Internal thoughts
-  }
-
-  // Send both the thought and the perception data back to the frontend
-  if (thought && perception) {
-    res.status(200).json({ thought, perception, category });
+  if (thought) {
+    res.status(200).json({ thought });
   } else {
-    res.status(500).json({ error: "Failed to retrieve thought or perception data" });
+    res.status(500).json({ error: "No thought returned" });
   }
 }

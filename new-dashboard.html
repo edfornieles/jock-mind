@@ -3,165 +3,119 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>New Dashboard</title>
+  <title>AI Character Dashboard - Retro</title>
   <style>
     body {
-      font-family: 'Courier New', monospace;
       background-color: black;
+      font-family: 'Courier New', monospace;
       color: lime;
-      margin: 0;
-      padding: 0;
     }
-
     header {
       text-align: center;
-      padding: 20px;
-      font-size: 2.5rem;
-      text-transform: uppercase;
-      letter-spacing: 3px;
-      color: lime;
-      border-bottom: 3px solid lime;
+      font-size: 2rem;
+      margin-top: 20px;
     }
-
     .dashboard {
-      display: flex;
-      justify-content: space-evenly;
-      flex-wrap: wrap;
-      padding: 20px;
-      gap: 30px;
+      margin-top: 30px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      padding: 2rem;
     }
-
     .character-card {
       background-color: #333;
-      border: 2px solid #444;
-      border-radius: 10px;
-      width: 300px;
       padding: 20px;
-      box-shadow: 0 0 10px rgba(0, 255, 0, 0.4);
+      border: 2px solid lime;
+      border-radius: 10px;
     }
-
-    .character-card h2 {
-      font-size: 1.8rem;
-      margin-bottom: 15px;
-      text-align: center;
-      color: #00ff00;
-      text-transform: uppercase;
-    }
-
-    .section-label {
-      font-weight: bold;
+    .content {
       margin-top: 10px;
       font-size: 1.2rem;
-    }
-
-    .content {
-      background-color: #222;
-      color: #00ff00;
-      padding: 10px;
-      font-size: 1rem;
-      min-height: 60px;
+      min-height: 50px;
       white-space: pre-wrap;
-      margin-top: 10px;
-      border-radius: 6px;
-      border: 1px solid #444;
-    }
-
-    .content.loading {
-      color: gray;
     }
   </style>
 </head>
 <body>
-
-  <header>NEW DASHBOARD - 80s Retro</header>
+  <header>🎮 AI Character Dashboard</header>
 
   <div class="dashboard" id="dashboard"></div>
 
   <script>
-    // Fetch and display thought and perception data for a character
-    async function fetchData(url, field) {
+    async function fetchAndSet(id, url, field = 'thought') {
       try {
         const res = await fetch(url);
-        if (!res.ok) throw new Error(`Failed to fetch ${field}`);
-
         const data = await res.json();
-        return data[field] || 'No data available';
-      } catch (error) {
-        console.error(error);
-        return 'Error loading data';
+        const content = data[field] || 'Unavailable';
+        const element = document.getElementById(id);
+
+        // Apply color coding based on category
+        if (data.category === 'blue') {
+          element.style.color = 'blue'; 
+        } else if (data.category === 'red') {
+          element.style.color = 'red'; 
+        } else if (data.category === 'yellow') {
+          element.style.color = 'yellow'; 
+        } else if (data.category === 'green') {
+          element.style.color = 'green'; 
+        }
+
+        element.innerText = content;
+      } catch (e) {
+        document.getElementById(id).innerText = 'Error loading data.';
+        console.error("Error fetching:", e);
       }
     }
 
-    // Create and display a character's data
-    async function createCharacterCard(character) {
-      const card = document.createElement('div');
-      card.className = 'character-card';
-
-      const title = document.createElement('h2');
-      title.textContent = `${character.emoji} ${character.name}`;
-      card.appendChild(title);
-
-      const thoughtLabel = document.createElement('div');
-      thoughtLabel.className = 'section-label';
-      thoughtLabel.textContent = 'Thought';
-      card.appendChild(thoughtLabel);
-
-      const thoughtContent = document.createElement('div');
-      thoughtContent.className = 'content loading';
-      thoughtContent.id = `${character.id}-thought`;
-      thoughtContent.textContent = 'Loading...';
-      card.appendChild(thoughtContent);
-
-      const streamLabel = document.createElement('div');
-      streamLabel.className = 'section-label';
-      streamLabel.textContent = 'Perception';
-      card.appendChild(streamLabel);
-
-      const streamContent = document.createElement('div');
-      streamContent.className = 'content loading';
-      streamContent.id = `${character.id}-stream`;
-      streamContent.textContent = 'Loading...';
-      card.appendChild(streamContent);
-
-      // Fetch the data for thought and perception
-      const thought = await fetchData(character.thoughtEndpoint, 'thought');
-      const perception = await fetchData(character.streamEndpoint, 'stream');
-
-      thoughtContent.textContent = thought;
-      streamContent.textContent = perception;
-
-      // Append card to dashboard
-      document.getElementById('dashboard').appendChild(card);
-    }
-
-    // Main function to load all characters and create their cards
-    async function loadDashboard() {
+    async function buildDashboard() {
+      const container = document.getElementById("dashboard");
       const characters = [
         {
           id: 'jock',
           name: 'Jock',
           emoji: '🏈',
-          thoughtEndpoint: 'https://jock-mind-api.vercel.app/api/jock-thought',
-          streamEndpoint: 'https://jock-mind-api.vercel.app/api/jock-stream',
+          thoughtEndpoint: '/api/jock-thought',
+          streamEndpoint: '/api/jock-stream',
         },
         {
           id: 'sorority',
           name: 'Sorority Girl',
           emoji: '💄',
-          thoughtEndpoint: 'https://jock-mind-api.vercel.app/api/sorority-thought',
-          streamEndpoint: 'https://jock-mind-api.vercel.app/api/sorority-stream',
+          thoughtEndpoint: '/api/sorority-thought',
+          streamEndpoint: '/api/sorority-stream',
         }
       ];
 
-      // Create cards for all characters
-      for (const character of characters) {
-        await createCharacterCard(character);
-      }
+      characters.forEach(char => {
+        const card = document.createElement("div");
+        card.className = "character-card";
+
+        const title = document.createElement("h2");
+        title.textContent = `${char.emoji} ${char.name}`;
+        card.appendChild(title);
+
+        const thoughtContent = document.createElement("div");
+        thoughtContent.className = "content";
+        thoughtContent.id = `${char.id}-thought`;
+        thoughtContent.textContent = "Loading...";
+        card.appendChild(thoughtContent);
+
+        fetchAndSet(`${char.id}-thought`, char.thoughtEndpoint, 'thought');
+
+        const streamContent = document.createElement("div");
+        streamContent.className = "content";
+        streamContent.id = `${char.id}-stream`;
+        streamContent.textContent = "Loading...";
+        card.appendChild(streamContent);
+
+        fetchAndSet(`${char.id}-stream`, char.streamEndpoint, 'stream');
+
+        container.appendChild(card);
+      });
     }
 
-    // Load the dashboard when the page loads
-    loadDashboard();
+    buildDashboard();
+    setInterval(buildDashboard, 60000); // refresh every 60 sec
   </script>
-
 </body>
 </html>
