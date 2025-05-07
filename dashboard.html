@@ -92,6 +92,8 @@
         const res = await fetch("characters.json");
         const characters = await res.json();
 
+        console.log('Fetched characters:', characters); // Log characters fetched
+
         characters.forEach(char => {
           const card = document.createElement("div");
           card.className = "character-card";
