@@ -24,7 +24,7 @@
       color: #ffffff;
       text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
       opacity: 0;
-      transition: opacity 0.5s ease-in-out;
+      transition: opacity 1s ease-in-out; /* Longer fade */
     }
   </style>
 </head>
@@ -48,11 +48,11 @@
       setTimeout(() => {
         thoughtElement.innerText = thoughts[thoughtIndex];
         thoughtElement.style.opacity = 1;  // Fade in
-      }, 500);
+      }, 1000);  // Wait for fade out
       thoughtIndex = (thoughtIndex + 1) % thoughts.length;
     }
 
-    setInterval(showThought, 3000);  // Show a new thought every 3 seconds
+    setInterval(showThought, 6000);  // Show a new thought every 6 seconds
     showThought();  // Initial thought
   </script>
 </body>
