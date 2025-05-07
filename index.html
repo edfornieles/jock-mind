@@ -1,55 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI Character Dashboard</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      color: white;
-      background-image: url('https://your-image-url.com/background.jpg'); /* Update with correct background image URL */
-      background-size: cover;
-      background-position: center;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    .thought {
-      font-size: 3rem;
-      font-weight: bold;
-      text-align: center;
-      white-space: pre-wrap;
-      max-width: 80%;
-    }
-  </style>
-</head>
-<body>
-  <div class="thought" id="thought">Loading...</div>
+async function fetchThought() {
+  const res = await fetch('https://jock-mind-api.vercel.app/api/jock-thought');
+  const data = await res.json();
+  const thoughtElement = document.getElementById('thought');
+  thoughtElement.innerText = data.thought || "No thought available.";
+}
 
-  <script>
-    async function fetchThought() {
-      try {
-        const response = await fetch('https://jock-mind-api.vercel.app/api/jock-thought');
-        if (!response.ok) {
-          throw new Error('Failed to fetch thought');
-        }
-        const data = await response.json();
-        const thought = data.thought || "No thought available.";
-        
-        document.getElementById('thought').textContent = thought;
-        
-        // Make it fade in and out slowly
-        setTimeout(fetchThought, 4000);  // Delay for the next thought
-      } catch (error) {
-        document.getElementById('thought').textContent = "Error fetching thought.";
-        console.error('Error fetching thought:', error);
-      }
-    }
+async function fetchPerception() {
+  const res = await fetch('https://jock-mind-api.vercel.app/api/jock-stream');
+  const data = await res.json();
+  const perceptionElement = document.getElementById('perception');
+  perceptionElement.innerText = data.perception || "No perception data available.";
+}
 
-    fetchThought();  // Start the fetching process
-  </script>
-</body>
-</html>
+setInterval(fetchThought, 2000); // Fetch thought every 2 seconds
+setInterval(fetchPerception, 3000); // Fetch perception every 3 seconds
+
+fetchThought();
+fetchPerception();
