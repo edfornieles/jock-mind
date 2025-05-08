@@ -7,9 +7,11 @@ interface ThoughtContext {
   mood?: string;
 }
 
+const API_BASE_URL = 'https://jock-mind-api.vercel.app'
+
 export async function generateThought(context: ThoughtContext): Promise<string> {
   try {
-    const response = await fetch('/api/generate-thought', {
+    const response = await fetch(`${API_BASE_URL}/api/generate-thought`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
