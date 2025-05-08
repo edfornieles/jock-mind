@@ -50,8 +50,8 @@ export function getNextLocation(currentLocation: string): string {
   return possibleNextLocations[Math.floor(Math.random() * possibleNextLocations.length)]
 }
 
-export function getNextTimeOfDay(currentTimeOfDay: string): string {
-  const timesOfDay = ['morning', 'afternoon', 'evening', 'night']
+export function getNextTimeOfDay(currentTimeOfDay: 'morning' | 'afternoon' | 'evening' | 'night'): 'morning' | 'afternoon' | 'evening' | 'night' {
+  const timesOfDay = ['morning', 'afternoon', 'evening', 'night'] as const
   const currentIndex = timesOfDay.indexOf(currentTimeOfDay)
   const nextIndex = (currentIndex + 1) % timesOfDay.length
   return timesOfDay[nextIndex]
