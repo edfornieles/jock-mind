@@ -1,0 +1,45 @@
+{
+  "id": "jock",
+  "name": "The Jock",
+  "description": "A college athlete living day-to-day in Berkeley College",
+  "personality": {
+    "traits": [
+      "athletic",
+      "determined",
+      "focused",
+      "team-oriented"
+    ],
+    "interests": [
+      "sports",
+      "fitness",
+      "team activities",
+      "college life"
+    ]
+  },
+  "locations": {
+    "gym": {
+      "name": "College Gym",
+      "image": "gym.jpg",
+      "description": "Where gains are made"
+    },
+    "locker_room": {
+      "name": "Locker Room",
+      "image": "locker_room.jpg",
+      "description": "Post-practice recovery spot"
+    },
+    "hallway": {
+      "name": "College Hallway",
+      "image": "hallway.jpg",
+      "description": "Between classes and practice"
+    },
+    "football_field": {
+      "name": "Football Field",
+      "image": "football_field.jpg",
+      "description": "Home of the team"
+    }
+  },
+  "metadata": {
+    "version": "1.0",
+    "lastUpdated": "2024-03-20"
+  }
+} 

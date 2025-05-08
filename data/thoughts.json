@@ -1,0 +1,49 @@
+{
+  "thoughts": [
+    {
+      "id": "gym-1",
+      "content": "I just crushed my workout. These gains aren't gonna build themselves!",
+      "background": "gym.jpg",
+      "timeOfDay": "morning",
+      "mood": "energetic",
+      "location": "gym"
+    },
+    {
+      "id": "gym-2",
+      "content": "Man, I'm feeling sore. That leg day was intense.",
+      "background": "gym.jpg",
+      "timeOfDay": "morning",
+      "mood": "tired",
+      "location": "gym"
+    },
+    {
+      "id": "locker-1",
+      "content": "Nothing like a hot shower after practice. Time to hit the books.",
+      "background": "locker_room.jpg",
+      "timeOfDay": "afternoon",
+      "mood": "relaxed",
+      "location": "locker_room"
+    },
+    {
+      "id": "hallway-1",
+      "content": "Gotta make it to class on time. Coach would kill me if I missed another one.",
+      "background": "hallway.jpg",
+      "timeOfDay": "morning",
+      "mood": "focused",
+      "location": "hallway"
+    },
+    {
+      "id": "field-1",
+      "content": "The field looks perfect today. Perfect day for practice.",
+      "background": "football_field.jpg",
+      "timeOfDay": "afternoon",
+      "mood": "excited",
+      "location": "football_field"
+    }
+  ],
+  "metadata": {
+    "version": "1.0",
+    "lastUpdated": "2024-03-20",
+    "totalThoughts": 5
+  }
+} 
