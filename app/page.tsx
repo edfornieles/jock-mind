@@ -10,10 +10,10 @@ export default function Home() {
   const [currentThought, setCurrentThought] = useState<Thought>({
     id: 'initial',
     content: 'Just woke up in my dorm...',
-    background: '/images/dorm.jpg',
+    background: '/images/hallway.jpg',
     timeOfDay: 'morning',
     mood: 'neutral',
-    location: 'dorm'
+    location: 'hallway'
   })
 
   useEffect(() => {

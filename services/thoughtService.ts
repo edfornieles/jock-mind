@@ -18,33 +18,41 @@ export async function generateThought(context: ThoughtContext): Promise<string> 
     })
 
     if (!response.ok) {
-      throw new Error('Failed to generate thought')
+      const errorData = await response.json().catch(() => null)
+      const errorMessage = errorData?.error?.message || 'Failed to generate thought'
+      console.error('API Error:', {
+        status: response.status,
+        statusText: response.statusText,
+        error: errorMessage
+      })
+      throw new Error(errorMessage)
     }
 
     const data = await response.json()
     return data.thought
   } catch (error) {
     console.error('Error generating thought:', error)
-    return 'Error generating thought. Please try again.'
+    // Return a fallback thought instead of throwing
+    return "I'm having trouble thinking right now. Let me try again later."
   }
 }
 
 export function getNextLocation(currentLocation: string): string {
   // Define possible locations and their connections
   const locations = {
-    'dorm': ['class', 'gym', 'library'],
-    'class': ['dorm', 'gym', 'library'],
-    'gym': ['dorm', 'class', 'library'],
-    'library': ['dorm', 'class', 'gym'],
+    'hallway': ['gym', 'locker_room', 'football_field'],
+    'gym': ['hallway', 'locker_room', 'football_field'],
+    'locker_room': ['hallway', 'gym', 'football_field'],
+    'football_field': ['hallway', 'gym', 'locker_room'],
   }
 
-  const possibleNextLocations = locations[currentLocation as keyof typeof locations] || ['dorm']
+  const possibleNextLocations = locations[currentLocation as keyof typeof locations] || ['hallway']
   return possibleNextLocations[Math.floor(Math.random() * possibleNextLocations.length)]
 }
 
-export function getNextTimeOfDay(currentTime: string): string {
-  const timeSequence = ['morning', 'afternoon', 'evening', 'night']
-  const currentIndex = timeSequence.indexOf(currentTime)
-  const nextIndex = (currentIndex + 1) % timeSequence.length
-  return timeSequence[nextIndex]
+export function getNextTimeOfDay(currentTimeOfDay: string): string {
+  const timesOfDay = ['morning', 'afternoon', 'evening', 'night']
+  const currentIndex = timesOfDay.indexOf(currentTimeOfDay)
+  const nextIndex = (currentIndex + 1) % timesOfDay.length
+  return timesOfDay[nextIndex]
 } 
