@@ -10,8 +10,7 @@ export async function POST(request: Request) {
 
   try {
     const openai = new OpenAI({ 
-      apiKey: apiKey,
-      organization: process.env.OPENAI_ORGANIZATION_ID
+      apiKey: apiKey.trim()
     });
 
     const { location, timeOfDay, previousThought, mood } = await request.json()

@@ -8,10 +8,8 @@ export function validateApiKey(key: string): boolean {
   if (!key) return false
   // Remove any whitespace or newlines that might have been accidentally added
   const cleanKey = key.trim()
-  return cleanKey.startsWith('sk-proj-') || 
-         cleanKey.startsWith('sk-') || 
-         cleanKey.startsWith('org-') || 
-         cleanKey.startsWith('sk-admin-')
+  // OpenAI API keys start with 'sk-' followed by random characters
+  return cleanKey.startsWith('sk-')
 }
 
 // Get the API key with validation
@@ -21,7 +19,7 @@ export function getOpenAIKey(): string {
     throw new Error('OpenAI API key not found in environment variables')
   }
   if (!validateApiKey(key)) {
-    throw new Error('Invalid OpenAI API key format')
+    throw new Error('Invalid OpenAI API key format. The key should start with "sk-"')
   }
   return key.trim()
 } 
