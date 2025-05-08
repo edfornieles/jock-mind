@@ -5,5 +5,23 @@ export const API_KEYS = {
 
 // Validate API key format
 export function validateApiKey(key: string): boolean {
-  return key.startsWith('sk-proj-') || key.startsWith('sk-') || key.startsWith('org-') || key.startsWith('sk-admin-')
+  if (!key) return false
+  // Remove any whitespace or newlines that might have been accidentally added
+  const cleanKey = key.trim()
+  return cleanKey.startsWith('sk-proj-') || 
+         cleanKey.startsWith('sk-') || 
+         cleanKey.startsWith('org-') || 
+         cleanKey.startsWith('sk-admin-')
+}
+
+// Get the API key with validation
+export function getOpenAIKey(): string {
+  const key = API_KEYS.OPENAI_API_KEY
+  if (!key) {
+    throw new Error('OpenAI API key not found in environment variables')
+  }
+  if (!validateApiKey(key)) {
+    throw new Error('Invalid OpenAI API key format')
+  }
+  return key.trim()
 } 

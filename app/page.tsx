@@ -5,7 +5,11 @@ import BackgroundImage from '@/components/BackgroundImage'
 import ThoughtDisplay from '@/components/ThoughtDisplay'
 import { generateThought, getNextLocation, getNextTimeOfDay } from '@/services/thoughtService'
 import type { Thought } from '@/types'
+import { SceneManager } from '@/components/SceneManager'
+import { scenes } from '@/data/scenes'
 
+// Original implementation (commented out for easy rollback)
+/*
 export default function Home() {
   const [currentThought, setCurrentThought] = useState<Thought>({
     id: 'initial',
@@ -51,6 +55,16 @@ export default function Home() {
       <ThoughtDisplay
         thought={currentThought}
       />
+    </main>
+  )
+}
+*/
+
+// New scene-based implementation
+export default function Home() {
+  return (
+    <main className="min-h-screen">
+      <SceneManager scenes={scenes} />
     </main>
   )
 } 
